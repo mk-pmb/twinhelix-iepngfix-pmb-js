@@ -1,4 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
@@ -13,7 +14,7 @@
   USAGE:
   Copy and paste this one line into your site's CSS stylesheet.
   Add comma-separated CSS selectors / element names that have transparent PNGs.
-  The path to the HTC is relative to the HTML file that includes it.
+  Remember that the path is RELATIVE TO THIS HTML FILE, not the CSS file.
   See below for another method of activating the script without adding CSS here.
  */
 
@@ -22,10 +23,19 @@
 
  /*
   Here's an example you might use in practice:
-  img, div, .pngfix, input { behavior: url("/css/iepngfix.htc") }
+  img, div.menu, .pngfix, input { behavior: url("/css/iepngfix.htc") }
  */
 
  </style>
+
+ <!--
+  Consider wrapping the <style> element above in IE conditional comments.
+  This will prevent the .HTC being downloaded by IE7+ at all.
+  This might not work in IE6 installed alongside IE7 on the same computer.
+  -->
+
+ <!--[if lte IE 6]><style>/* ... your rules ... */</style><![endif]-->
+
 
  <script type="text/javascript">
  //<![CDATA[
@@ -80,16 +90,6 @@
  //]]>
  </script>
 
- <!--
-  Final word of advice: You can wrap the STYLE element above in IE conditional
-  comments like below to prevent the .HTC being downloaded by IE7+ at all.
-  It's by no means required, and will most likely break IE6 installed alongside
-  IE7 on the same computer (despite working fine in vanilla system-wide IE6).
- -->
-
- <!--[if lte IE 6]><style>/* Activate it here */</style><![endif]-->
-
-
  <style type="text/css">
   /* Some styles for the default demonstration */
   body {
@@ -121,6 +121,7 @@
    background-image: url(checkerboard.gif);
    border: 2px solid #999;
    padding: 20px;
+   margin-left: 10px;
    float: right;
   }
 
@@ -129,6 +130,7 @@
    width: 200px;
    background: url(opacity.png);
    text-align: center;
+   border: 1px solid #999;
   }
 
   #demoLink {
@@ -168,9 +170,9 @@
 <body>
 
 <div id="header">
- <h1>IE PNG Alpha Fix v2.0 Alpha 2</h1>
+ <h1>IE PNG Alpha Fix v2.0 Alpha 3</h1>
  by Angus Turnbull - <a href="http://www.twinhelix.com">http://www.twinhelix.com</a>.
- Updated: 17 July 2008.
+ Updated: 30 August 2008.
  <hr />
 </div>
 
@@ -196,6 +198,8 @@
   <a href="#" onclick="document.getElementById('demoDiv').style.background='none'; return false">None</a>
   <br />
   <a href="#" onclick="document.getElementById('demoDiv').style.backgroundPosition=(Math.random()*200)+'px '+(Math.random()*200)+'px'; return false">Background Position</a>
+  |
+  <a href="#" onclick="document.getElementById('demoDiv').style.height=(100 + Math.random()*300)+'px'; return false">Height</a>
  </div>
 
  <h3>IMAGE DROPSHADOW</h3>
@@ -209,7 +213,9 @@
 
  <h3>INPUT TYPE=IMAGE</h3>
  <form action="javascript:void(0)">
-  <input type="image" src="opacity.png" />
+  <div>
+   <input type="image" src="opacity.png" />
+  </div>
  </form>
 
  <h3>CLASSNAME CHANGE</h3>
@@ -295,11 +301,13 @@ include:</p>
   your website folder.</li>
  <li>Copy and paste this into your website's CSS or HTML:
   <blockquote>
-   <code>
-    &lt;style type="text/css"&gt;<br />
-    img, div { behavior: url(iepngfix.htc) }<br />
-    &lt;/style&gt;
-   </code>
+   <div>
+    <code>
+     &lt;style type="text/css"&gt;<br />
+     img, div { behavior: url(iepngfix.htc) }<br />
+     &lt;/style&gt;
+    </code>
+   </div>
   </blockquote>
   That CSS selector must include the tags/elements on which you want PNG
   support -- basically, give it a comma-separated list of tags you use.
@@ -307,29 +315,35 @@ include:</p>
   document location</em> (not relative to the CSS document!). For instance,
   yours may look like this:
   <blockquote>
-   <code>
-    &lt;style type="text/css"&gt;<br />
-    img, div, a, input { behavior: url(/css/resources/iepngfix.htc) }<br />
-    &lt;/style&gt;
-   </code>
+   <div>
+    <code>
+     &lt;style type="text/css"&gt;<br />
+     img, div, a, input { behavior: url(/css/resources/iepngfix.htc) }<br />
+     &lt;/style&gt;
+    </code>
+   </div>
   </blockquote>
  </li>
  <li>If your site uses subfolders, open the .HTC file in a text editor like
   Windows Notepad and change the <code>blankImg</code> variable to include
   a correct path to blank.gif like so:
   <blockquote>
-   <code>
-    IEPNGFix.blankImg = '/images/blank.gif';
-   </code>
+   <div>
+    <code>
+     IEPNGFix.blankImg = '/images/blank.gif';
+    </code>
+   </div>
   </blockquote>
   Again the path is relative to the HTML file.
   Otherwise, you will see a "broken image" graphic!</li>
  <li>If you want support for CSS1 background-repeat and background-position,
   make sure you include the add-on .JS file in your <code>&lt;head&gt;</code>:
   <blockquote>
-   <code>
-    &lt;script type="text/javascript" src="iepngfix_tilebg.js"&gt;&lt;/script&gt;
-   </code>
+   <div>
+    <code>
+     &lt;script type="text/javascript" src="iepngfix_tilebg.js"&gt;&lt;/script&gt;
+    </code>
+   </div>
   </blockquote>
   Otherwise, background images will work but won't repeat or position.
  </li>
@@ -387,6 +401,7 @@ code to this demonstration file.</p>
   that you copy the required DLLs into your IE6 folder. You will need
   <code>dxtrans.dll</code> and <code>dxtmsft.dll</code> for filter support,
   try Googling for them or finding them on your Windows install CD.
+  They must also be the "version 6" DLLs, not v7+, to work with IE6.
   Note that I can't support your setup here, sorry!</dd>
  <dt>I have lots of images and page loading is slow.</dt>
  <dd>With a lot of images, it can certainly slow down your page! Make sure
@@ -447,6 +462,15 @@ to a minimum (at the expense of comprehensibility, sorry!).</p>
 
 <h3>Changelog</h3>
 <ul>
+ <li>v2.0 Alpha 3
+  <ul>
+   <li>Changed activation method so inline LI elements etc. work OK.</li>
+   <li>Script now handles dynamic element width/height changes.</li>
+   <li>Added .update() method to the background tiler that will update all
+    elements on the page (called automatically on window resize).</li>
+   <li>Restored "scale" sizingMethod for IMG SRC elements.</li>
+  </ul>
+ </li>
  <li>v2.0 Alpha 2
   <ul>
    <li>Fixed issue with positioning non-repeated backgrounds.</li>

@@ -1,28 +1,19 @@
 <public:component>
-<public:attach event="oncontentready"
-	onevent="IEPNGFix.process(element, 1)" />
-
 <script type="text/javascript">
 
-// IE5.5+ PNG Alpha Fix v2.0 Alpha 2
+// IE5.5+ PNG Alpha Fix v2.0 Alpha
 // (c) 2004-2008 Angus Turnbull http://www.twinhelix.com
 
 // This is licensed under the GNU LGPL, version 2.1 or later.
 // For details, see: http://creativecommons.org/licenses/LGPL/2.1/
 
-if (!window.IEPNGFix) {
-	window.IEPNGFix = {};
-}
+var IEPNGFix = window.IEPNGFix || {};
+IEPNGFix.data = IEPNGFix.data || {};
 
 
 // This must be a path to a blank image, relative to the HTML document(s).
 // In production use I suggest '/images/blank.gif' or similar. That's all!
 IEPNGFix.blankImg = 'blank.gif';
-
-
-if (!IEPNGFix.data) {
-	IEPNGFix.data = {};
-}
 
 
 IEPNGFix.fix = function(elm, src, t) {
@@ -35,7 +26,7 @@ IEPNGFix.fix = function(elm, src, t) {
 	this.hook.enabled = 0;
 
 	var f = 'DXImageTransform.Microsoft.AlphaImageLoader';
-	src = (src || '').replace(/\(/g, '%28').replace(/\)/g, '%29');
+		src = (src || '').replace(/\(/g, '%28').replace(/\)/g, '%29');
 
 	if (
 		src && !(/IMG|INPUT/.test(elm.nodeName) && (t != 2)) &&
@@ -62,7 +53,7 @@ IEPNGFix.fix = function(elm, src, t) {
 		}
 	} else if (src) {
 		elm.style.filter = 'progid:' + f + '(src="' + src +
-			'",sizingMethod="crop")';
+			'",sizingMethod="' + (t == 2 ? 'scale' : 'crop') + '")';
 	}
 
 	this.hook.enabled = h;
@@ -88,7 +79,7 @@ IEPNGFix.process = function(elm, init) {
 		evt = init ? { propertyName: 'src,backgroundImage' } : event,
 		isSrc = /src/.test(evt.propertyName),
 		isBg = /backgroundImage/.test(evt.propertyName),
-		isPos = /background(Pos|Rep)/.test(evt.propertyName),
+		isPos = /width|height|background(Pos|Rep)/.test(evt.propertyName),
 		isClass = !init && ((elm.className != data.className) &&
 			(elm.className || data.className));
 	if (!(isSrc || isBg || isPos || isClass)) {
@@ -173,7 +164,7 @@ IEPNGFix.childFix = function(elm) {
 	t = tFix.length;
 	if (t && (/relative|absolute/i).test(elm.currentStyle.position)) {
 		alert('IEPNGFix: Unclickable children of element:' +
-			'\n\n<' + elm.nodeName + (id && ' id=' + id) + '>');
+			'\n\n<' + elm.nodeName + (elm.id && ' id=' + elm.id) + '>');
 	}
 	while (t--) {
 		if (!(/relative|absolute/i).test(tFix[t].currentStyle.position)) {
@@ -188,6 +179,9 @@ IEPNGFix.hook = function() {
 		IEPNGFix.process(element, 0);
 	}
 };
+
+
+IEPNGFix.process(element, 1);
 
 </script>
 </public:component>

@@ -1,12 +1,10 @@
-// IE5.5+ PNG Alpha Fix v2.0beta1: Background Tiling Support
+// IE5.5+ PNG Alpha Fix v2.0 Alpha: Background Tiling Support
 // (c) 2008 Angus Turnbull http://www.twinhelix.com
 
 // This is licensed under the GNU LGPL, version 2.1 or later.
 // For details, see: http://creativecommons.org/licenses/LGPL/2.1/
 
-if (!window.IEPNGFix) {
-	window.IEPNGFix = {};
-}
+var IEPNGFix = window.IEPNGFix || {};
 
 IEPNGFix.tileBG = function(elm, pngSrc, ready) {
 	// Params: A reference to a DOM element, the PNG src file pathname, and a
@@ -22,6 +20,7 @@ IEPNGFix.tileBG = function(elm, pngSrc, ready) {
 	// Cache of DIVs created per element, and image preloader/data.
 	if (!data.tiles) {
 		data.tiles = {
+			elm: elm,
 			src: '',
 			cache: [],
 			img: new Image(),
@@ -153,3 +152,22 @@ IEPNGFix.tileBG = function(elm, pngSrc, ready) {
 		r: bgR
 	};
 };
+
+
+IEPNGFix.update = function() {
+	// Update all PNG backgrounds.
+	for (var i in IEPNGFix.data) {
+		var t = IEPNGFix.data[i].tiles;
+		if (t && t.elm && t.src) {
+			IEPNGFix.tileBG(t.elm, t.src);
+		}
+	}
+};
+IEPNGFix.update.timer = 0;
+
+if (window.attachEvent && !window.opera) {
+	window.attachEvent('onresize', function() {
+		clearTimeout(IEPNGFix.update.timer);
+		IEPNGFix.update.timer = setTimeout(IEPNGFix.update, 100);
+	});
+}
