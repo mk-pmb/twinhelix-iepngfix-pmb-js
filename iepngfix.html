@@ -7,19 +7,19 @@
  <style type="text/css">
 
  /*
-  USAGE: All you have to do is include this one line in your CSS file, with the
-  tag names or CSS selectors to which you want the script applied.
-  Ensure the path to the .HTC file is correct too.
+  USAGE:
+  Copy and paste this one line into your site's CSS stylesheet.
+  Add comma-separated CSS selectors / element names that have transparent PNGs.
+  The path to the HTC is relative to the HTML file that includes it.
   See below for another method of activating the script without adding CSS here.
  */
 
- img, div { behavior: url("iepngfix.htc") }
+ img, div, input { behavior: url("iepngfix.htc") }
+
 
  /*
-
-  Or try applying only to elements that have CLASS="pngalpha":
-   .pngalpha { behavior: url("iepngfix.htc") }
-   
+  Here's an example you might use in practice:
+  img, div, .pngfix, input { behavior: url("/css/iepngfix.htc") }
  */
 
  </style>
@@ -86,11 +86,22 @@
    padding: 20px;
    float: right;
   }
+
   #demoDiv {
    height: 200px;
    width: 200px;
    background: url(opacity.png);
    text-align: center;
+  }
+
+  #demoLink {
+   background: url(opacity2.png) no-repeat;
+   cursor: pointer;
+   /*
+    Here we apply the fix to just one element.
+    You can do the same with CLASS selectors...
+   */
+   behavior: url("iepngfix.htc");
   }
 
   .shadowImg {
@@ -104,9 +115,9 @@
 <body>
 
 <div id="header">
- <h1>IE PNG Alpha Fix v1.0 RC5 Preview 4</h1>
+ <h1>IE PNG Alpha Fix v1.0 RC4 Preview 5</h1>
  by Angus Turnbull - <a href="http://www.twinhelix.com">http://www.twinhelix.com</a>.
- Updated: 25 September 2007.
+ Updated: 26 January 2008.
  <hr />
 </div>
 
@@ -128,7 +139,7 @@
   |
   <a href="#" onclick="document.getElementById('demoDiv').style.background='url(opacity.png)'; return false">PNG 1</a>
   |
-  <a href="#" onclick="document.getElementById('demoDiv').style.background='url(opacity2.png)';  return false">PNG 2</a>
+  <a href="#" onclick="document.getElementById('demoDiv').style.background='url(opacity2.png)'; return false">PNG 2</a>
   |
   <a href="#" onclick="document.getElementById('demoDiv').style.background=''; return false">None</a>
  </div>
@@ -136,11 +147,20 @@
  <h3>IMAGE DROPSHADOW</h3>
  <p>(PNG background behind GIF/JPEG)</p>
  <img class="shadowImg" src="helix.gif" />
+
+ <h3>INLINE LINK</h3>
+ <a id="demoLink" href="#">Here's some inline link text.</a>
+
+ <h3>INPUT TYPE=IMAGE</h3>
+ <form action="javascript:void(0)">
+  <input type="image" src="opacity.png" />
+ </form>
+
 </div>
 
 
 <h3>What is it?</h3>
-<p>This is a IE5.5+ "bevhavior" that automatically adds near-native PNG support to
+<p>This is a IE5.5+ "behavior" that automatically adds near-native PNG support to
 MSIE 5.5 and 6.0 without any changes to the HTML document itself. Supported features
 include:</p>
 <ul>
@@ -208,7 +228,8 @@ code to this demonstration file.</p>
 <dl>
  <dt>I've pasted in the CSS but my PNGs aren't transparent!</dt>
  <dd>Make sure you remember that the path to the HTC file is relative to the HTML
-  file, not the CSS file (like CSS background images are).</dd>
+  file, not the CSS file (like CSS background images are). If you want to test the
+  path, insert this: <code>alert('This works!');</code> into the .HTC file.</dd>
  <dt>It works offline but not online.</dt>
   <dd>First try unzipping this default demonstration and uploading to your web
    server as-is. If it doesn't work, you have a MIME type problem.
@@ -222,8 +243,15 @@ code to this demonstration file.</p>
    </ol>
  </dd>
  <dt>My PNGs are transparent but have a funny border or red "X" icon.</dt>
- <dd>Check that the blankImg variable is set correctly in the .HTC file, again
-  this should be relative to the HTML document containing the PNGs.</dd>
+ <dd>Check that the <code>blankImg</code> variable is set correctly in the .HTC
+  file, again this should be relative to the HTML document containing the PNGs.</dd>
+ <dt>It works, but breaks another application like Google Maps on my page.</dt>
+ <dd>You'll need to stop applying this behavior to the third-party element that
+  presumably contains its own PNG fix. Try making your CSS selector more specific,
+  or put a manual override for the element in your CSS like so:
+  <code>* html div#map img { behavior: none; }</code></dd>
+  <dt>My images/backgrounds are distorted / won't repeat or position.</dt>
+  <dd>See the next "Limitations" section.</dd>
 </dl>
 
 
@@ -235,12 +263,15 @@ code to this demonstration file.</p>
   will display once (untiled) pixel-for-pixel.</li>
  <li>Due to an IE bug, if you are putting links within an element with a transparent
   background, the element must <em>not</em> have a CSS relative/absolute position.
-  Otherwise the links will be un-clickable. The script will warn you if this occurs.</li>
+  Otherwise the links will likely be un-clickable. The script will warn you with
+  a popup alert dialog if this occurs. There is an excellent article on
+  <a href="http://www.satzansatz.de/cssd/tmp/alphatransparency.html">PNG filters
+  and links</a> you might want to read if you are a CSS expert.</li>
  <li>It's most reliable on elements with non-'auto' dimensions set. So, give images and
   other elements width/height values; '100%', '10em' and '200px' and so on are all OK.
   Otherwise, elements can sometimes display in a distorted fashion.</li>
- <li>Elements to which you apply PNGs must be blocks, not inline (e.g. SPAN, A etc.).
-  You can fix this easily by adding 'display: block' to the element's CSS.</li>
+ <li>Padding and borders don't indent the PNG image and can sometimes contribute
+  to the distortion problem. An easy fix is to use 'margin' instead.</li>
  <li>A:HOVER transparent images are not supported out of the box. If you want
   this functionality, I recommend you download the excellent
   <a href="http://www.xs4all.nl/~peterned/csshover.html">Whatever:hover</a>
@@ -254,8 +285,6 @@ code to this demonstration file.</p>
  <li>The script detects the ".png" extension in image URLs. So if you have a CGI script that
   generates a PNG image, you may have to rewrite parts of the script, or just cache them as PNG
   files somewhere.</li>
- <li>Padding and borders don't indent the PNG image. An easy fix for this is to
-  wrap your PNG images in container DIVs or similar.</li>
  <li>There may be about a short time as soon as the image loads when images are not
   transparent, before the IE filter kicks in.</li>
 </ul>
@@ -264,7 +293,7 @@ code to this demonstration file.</p>
 <h3>License:</h3>
 <blockquote>
  <p>IE5.5+ PNG Alpha Fix v1.0RC5</p>
- <p>(c) 2004-2007 Angus Turnbull http://www.twinhelix.com</p>
+ <p>(c) 2004-2008 Angus Turnbull http://www.twinhelix.com</p>
  <p>This is licensed under the <a href="http://creativecommons.org/licenses/LGPL/2.1/">GNU LGPL,
   version 2.1 or later</a>.</p>
 </blockquote>
@@ -293,11 +322,11 @@ to a minimum (at the expense of comprehensibility, sorry!).</p>
    <li>Enhanced link fixer to cover many clickable elements, and added popup
     warning dialog when the fix cannot be made.</li>
    <li>Support for PNG backgrounds behind GIF/JPEG images (e.g. dropshadows).</li>
+   <li>Script sets display:inline-block automatically on inline elements.</li>
    <li>Loosened the URL matching rules, now any URLs with a .PNG in the path are
     activated, so /cgi-app/foo.png?date=123 will now work without modifications.</li>
    <li>Now works with the 'Whatever:hover' behavior to support :HOVER changing of
     background images on page elements!</li>
-   <li>Made the component 'lightweight' for a small speed boost.</li>
    <li>Simplified and reorganised portions of the script, especially the
     background image changer.</li>
    <li>Included demo .HTACCESS and .PHP files for sending the correct MIME type

@@ -1,10 +1,10 @@
-<public:component lightweight="true">
+<public:component>
 <public:attach event="onpropertychange" onevent="iePNGFix(0)" />
 
 <script type="text/javascript">
 
-// IE5.5+ PNG Alpha Fix v1.0RC5
-// (c) 2004-2007 Angus Turnbull http://www.twinhelix.com
+// IE5.5+ PNG Alpha Fix v1.0RC5 Preview 5
+// (c) 2004-2008 Angus Turnbull http://www.twinhelix.com
 
 // This is licensed under the GNU LGPL, version 2.1 or later.
 // For details, see: http://creativecommons.org/licenses/LGPL/2.1/
@@ -26,7 +26,8 @@ function filt(s, b)
   currentStyle.width == 'auto' && currentStyle.height == 'auto')
  {
   style.width = offsetWidth + 'px';
-  style.display = 'block';
+  style.height = clientHeight + 'px';
+  if (currentStyle.display == 'inline') style.display = 'inline-block';
  }
 
  if (filters[f])
@@ -53,7 +54,7 @@ function iePNGFix(init)
  if (isClass && ((style.backgroundImage.indexOf('url(') == -1) ||
      (style.backgroundImage.indexOf(blank) > -1)))
  {
-  style.backgroundImage = '';
+  setTimeout(function() { this.style.backgroundImage = '' }, 0);
   return;
  }
 
@@ -70,7 +71,7 @@ function iePNGFix(init)
  var bgSrc = currentStyle.backgroundImage || style.backgroundImage;
  if ((bgSrc + this.src).indexOf(blank) == -1)
  {
-  var bgPNG = bgSrc.match(/url[("']+(.*\.png[^\)"']*)[\)"']+/i);
+  var bgPNG = bgSrc.match(/^url[("']+(.*\.png[^\)"']*)[\)"']+[^\)]*$/i);
 
   if (bgPNG)
   {
@@ -86,8 +87,9 @@ function iePNGFix(init)
    }
    var t = tFix.length;
    if (t && (/relative|absolute/i).test(currentStyle.position))
-    alert('IEPNGFix: Children of positioned element are unclickable!\n' + this);
-   while(t--) tFix[t].style.position = 'relative';
+    alert('IEPNGFix: Children of positioned element are unclickable:\n\n<' +
+     nodeName + (id && ' id=' + id) + '>');
+   while (t--) tFix[t].style.position = 'relative';
   }
   else filt();
  }
