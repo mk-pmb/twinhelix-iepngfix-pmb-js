@@ -126,7 +126,11 @@ IEPNGFix.tileBG = function(elm, pngSrc, ready) {
 				if (isNew) {
 					s.position = 'absolute';
 					s.zIndex = -999;
-					elm.insertBefore(d, elm.firstChild);
+					if (elm.firstChild) {
+						elm.insertBefore(d, elm.firstChild);
+					} else {
+						elm.appendChild(d);
+					}
 				}
 				this.fix(d, pngSrc, 0);
 				count++;

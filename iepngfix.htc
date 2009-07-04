@@ -4,7 +4,7 @@
 
 <script type="text/javascript">
 
-// IE5.5+ PNG Alpha Fix v2.0beta1
+// IE5.5+ PNG Alpha Fix v2.0 Alpha 2
 // (c) 2004-2008 Angus Turnbull http://www.twinhelix.com
 
 // This is licensed under the GNU LGPL, version 2.1 or later.
@@ -123,10 +123,7 @@ IEPNGFix.process = function(elm, init) {
 	if ((bgSrc + elm.src).indexOf(blank) == -1) {
 		var bgPNG = bgSrc.match(/url[("']+(.*\.png[^\)"']*)[\)"']/i);
 		if (bgPNG) {
-			if (
-				eCS.backgroundRepeat != 'no-repeat' &&
-				this.tileBG && elm.firstChild
-			) {
+			if (this.tileBG && !{ IMG: 1, INPUT: 1 }[elm.nodeName]) {
 				this.tileBG(elm, bgPNG[1]);
 				this.fix(elm, '', 1);
 			} else {
@@ -142,7 +139,7 @@ IEPNGFix.process = function(elm, init) {
 			}
 			this.fix(elm, '');
 		}
-	} else if (isPos && data.tiles && data.tiles.src) {
+	} else if ((isPos || isClass) && data.tiles && data.tiles.src) {
 		this.tileBG(elm, data.tiles.src);
 	}
 
@@ -174,7 +171,7 @@ IEPNGFix.childFix = function(elm) {
 		}
 	}
 	t = tFix.length;
-	if (t && (/relative|absolute/i).test(eCS.position)) {
+	if (t && (/relative|absolute/i).test(elm.currentStyle.position)) {
 		alert('IEPNGFix: Unclickable children of element:' +
 			'\n\n<' + elm.nodeName + (id && ' id=' + id) + '>');
 	}

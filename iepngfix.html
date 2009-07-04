@@ -141,15 +141,19 @@
    behavior: url("iepngfix.htc");
   }
 
-  .opacity1, .opacity2 {
-   height: 200px;
+  #demoClass {
+   height: 220px;
    width: 200px;
+   background-repeat: no-repeat;
   }
   .opacity1 {
-   background: url(opacity.png);
+   background-position: 0px 0px;
+   background-image: url(opacity.png);
   }
   .opacity2 {
-   background: url(opacity2.png);
+   /* Try CSS sprites :) */
+   background-position: 0px 20px;
+   background-image: url(opacity2.png);
   }
 
   .shadowImg {
@@ -164,9 +168,9 @@
 <body>
 
 <div id="header">
- <h1>IE PNG Alpha Fix v2.0 Alpha 1</h1>
+ <h1>IE PNG Alpha Fix v2.0 Alpha 2</h1>
  by Angus Turnbull - <a href="http://www.twinhelix.com">http://www.twinhelix.com</a>.
- Updated: 12 July 2008.
+ Updated: 17 July 2008.
  <hr />
 </div>
 
@@ -387,7 +391,10 @@ code to this demonstration file.</p>
  <dt>I have lots of images and page loading is slow.</dt>
  <dd>With a lot of images, it can certainly slow down your page! Make sure
   that you apply the script as narrowly as possible. Consider applying only to
-  elements of a particular CLASS perhaps, rather than all tags...</dd>
+  elements of a particular CLASS perhaps, rather than all tags. Also, make
+  sure that you are not trying to tile a 1x1px PNG background over a large
+  element, as this will bring the browser to its kness -- make your images a
+  little larger if you run into this :).</dd>
  <dt>It still won't go.</dt>
  <dd>Try running the self-test at the bottom of the list of demo images.
   If that throws any errors, you'll know where to start fixing!</dd>
@@ -440,6 +447,14 @@ to a minimum (at the expense of comprehensibility, sorry!).</p>
 
 <h3>Changelog</h3>
 <ul>
+ <li>v2.0 Alpha 2
+  <ul>
+   <li>Fixed issue with positioning non-repeated backgrounds.</li>
+   <li>Fixed typo in child-link-fix function.</li>
+   <li>Fixed background-position changing via className (so 'CSS sprites'
+    should now work).</li>
+  </ul>
+ </li>
  <li>v2.0 Alpha 1
   <ul>
    <li>Complete rewrite into an object-based pattern.</li>
