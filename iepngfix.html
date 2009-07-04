@@ -4,6 +4,9 @@
  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
  <title>IE PNG Alpha Fix Demonstration</title>
 
+ <!-- Addon for background tiling support -->
+ <script type="text/javascript" src="iepngfix_tilebg.js"></script>
+
  <style type="text/css">
 
  /*
@@ -47,7 +50,7 @@
 
  // Here's another script that disables all PNGs in IE when the page is printed.
  /*
- if (window.attachEvent  && /MSIE (5\.5|6)/.test(navigator.userAgent))
+ if (window.attachEvent && /MSIE (5\.5|6)/.test(navigator.userAgent))
  {
   function printPNGFix(disable)
   {
@@ -83,6 +86,7 @@
   It's by no means required, and will most likely break IE6 installed alongside
   IE7 on the same computer (despite working fine in vanilla system-wide IE6).
  -->
+
  <!--[if lte IE 6]><style>/* Activate it here */</style><![endif]-->
 
 
@@ -121,7 +125,7 @@
   }
 
   #demoDiv {
-   height: 200px;
+   height: 300px;
    width: 200px;
    background: url(opacity.png);
    text-align: center;
@@ -152,6 +156,7 @@
    padding: 9px 11px 11px 9px;
    background-image: url(shadow.png);
   }
+
  </style>
 
 </head>
@@ -159,12 +164,11 @@
 <body>
 
 <div id="header">
- <h1>IE PNG Alpha Fix v1.0</h1>
+ <h1>IE PNG Alpha Fix v2.0 Alpha 1</h1>
  by Angus Turnbull - <a href="http://www.twinhelix.com">http://www.twinhelix.com</a>.
  Updated: 12 July 2008.
  <hr />
 </div>
-
 
 <div id="demoWrap">
 
@@ -186,6 +190,8 @@
   <a href="#" onclick="document.getElementById('demoDiv').style.background='url(opacity2.png)'; return false">PNG 2</a>
   |
   <a href="#" onclick="document.getElementById('demoDiv').style.background='none'; return false">None</a>
+  <br />
+  <a href="#" onclick="document.getElementById('demoDiv').style.backgroundPosition=(Math.random()*200)+'px '+(Math.random()*200)+'px'; return false">Background Position</a>
  </div>
 
  <h3>IMAGE DROPSHADOW</h3>
@@ -193,7 +199,9 @@
  <img class="shadowImg" src="helix.gif" alt="Helix" />
 
  <h3>INLINE LINK</h3>
- <a id="demoLink" href="#">Here's some inline link text.</a>
+ <a id="demoLink" href="#">
+  Here's some inline link text.
+ </a>
 
  <h3>INPUT TYPE=IMAGE</h3>
  <form action="javascript:void(0)">
@@ -217,7 +225,11 @@
             'and that the server is returning the correct MIME type.';
         var demoImg = document.getElementById('demoImg');
         alert(
-            'Filter activation: ' +
+            'IEPNGFix Core Behavior: ' +
+            (IEPNGFix.process ? 'OK' : failed) +
+            '\n\nBackground repeat/position extension: ' +
+            (IEPNGFix.tileBG ? 'OK' : 'MISSING! Check your SCRIPT SRC for the extension') +
+            '\n\nFilter activation: ' +
             (demoImg.filters['DXImageTransform.Microsoft.AlphaImageLoader'] ? 'OK' : failed) +
             '\n\nBLANK image pathname: ' + demoImg.src
         );
@@ -260,6 +272,7 @@ include:</p>
  <li>Automatic activation of transparency for PNGs in the page.</li>
  <li>Support for &lt;IMG SRC=""&gt; elements.</li>
  <li>Support for background PNG images (unlike many other scripts!)</li>
+ <li>Support for CSS1 background repeat and position (via optional add-on)</li>
  <li>Background images can be defined inline or in external stylesheets.</li>
  <li>Automatically handles changed SRC/background via normal JavaScript
   (e.g. mouseover rollovers) -- no special coding needed.</li>
@@ -302,11 +315,20 @@ include:</p>
   a correct path to blank.gif like so:
   <blockquote>
    <code>
-    var blankImg = '/images/blank.gif';
+    IEPNGFix.blankImg = '/images/blank.gif';
    </code>
   </blockquote>
   Again the path is relative to the HTML file.
   Otherwise, you will see a "broken image" graphic!</li>
+ <li>If you want support for CSS1 background-repeat and background-position,
+  make sure you include the add-on .JS file in your <code>&lt;head&gt;</code>:
+  <blockquote>
+   <code>
+    &lt;script type="text/javascript" src="iepngfix_tilebg.js"&gt;&lt;/script&gt;
+   </code>
+  </blockquote>
+  Otherwise, background images will work but won't repeat or position.
+ </li>
  <li>Sit back and enjoy! Perhaps consider making a
   <a href="http://www.twinhelix.com/donate/">donation</a> to support this script's
   development if you like what you see, as I have spent hundreds of hours
@@ -374,10 +396,6 @@ code to this demonstration file.</p>
 
 <h3>Limitations and known isses with the script</h3>
 <ul>
- <li>Background repeat and position are largely unsupported, this is due to a
-  limitation in the IE transparency filter. If your background is set to repeat,
-  the PNG will stretch to fill the element, and if it's 'no-repeat', the PNG
-  will display once (untiled) pixel-for-pixel.</li>
  <li>Padding and borders don't indent the PNG image and can sometimes contribute
   to the distortion problem. An easy fix is to use 'margin' instead.</li>
  <li>A:HOVER transparent images are not supported out of the box. If you want
@@ -400,7 +418,7 @@ code to this demonstration file.</p>
 
 <h3>License:</h3>
 <blockquote>
- <p>IE PNG Alpha Fix</p>
+ <p>IE5.5+ PNG Alpha Fix</p>
  <p>(c) 2004-2008 Angus Turnbull http://www.twinhelix.com</p>
  <p>This is licensed under the <a href="http://creativecommons.org/licenses/LGPL/2.1/">GNU LGPL,
   version 2.1 or later</a>.</p>
@@ -422,7 +440,17 @@ to a minimum (at the expense of comprehensibility, sorry!).</p>
 
 <h3>Changelog</h3>
 <ul>
- <li>v1.0 Final
+ <li>v2.0 Alpha 1
+  <ul>
+   <li>Complete rewrite into an object-based pattern.</li>
+   <li>Support for CSS1 background repeat and position.</li>
+   <li>Performance improvements via toggling of the 'onpropertychange' hook.</li>
+   <li>Activation of the script via 'oncontentready'.</li>
+   <li>Slightly enhanced self-test mode.</li>
+   <li>Numerous other minor tweaks.</li>
+  </ul>
+ </li>
+  <li>v1.0 Final
   <ul>
    <li>Loosened IMG SRC matching regex slightly.</li>
    <li>Script exits gracefully when IE filter isn't installed (e.g. IE on Linux).</li>
