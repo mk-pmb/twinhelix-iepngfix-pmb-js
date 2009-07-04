@@ -13,12 +13,9 @@
   See below for another method of activating the script without adding CSS here.
  */
 
- img, div, a#demoLink { behavior: url("iepngfix.htc") }
+ img, div { behavior: url("iepngfix.htc") }
 
  /*
-
-  You can specify that this will apply to all elements like so (will be slower):
-   * { behavior: url("iepngfix.htc") }
 
   Or try applying only to elements that have CLASS="pngalpha":
    .pngalpha { behavior: url("iepngfix.htc") }
@@ -79,6 +76,10 @@
    font-weight: bold;
    margin-top: 0.5em;
   }
+  code {
+   color: #663300;
+  }
+
   #demoWrap {
    background-image: url(checkerboard.gif);
    border: 2px solid #999;
@@ -91,6 +92,11 @@
    background: url(opacity.png);
    text-align: center;
   }
+
+  .shadowImg {
+   padding: 9px 11px 11px 9px;
+   background-image: url(shadow.png);
+  }
  </style>
 
 </head>
@@ -98,9 +104,9 @@
 <body>
 
 <div id="header">
- <h1>IE PNG Alpha Fix v1.0 RC5 Preview 3</h1>
+ <h1>IE PNG Alpha Fix v1.0 RC5 Preview 4</h1>
  by Angus Turnbull - <a href="http://www.twinhelix.com">http://www.twinhelix.com</a>.
- Updated: 11 August 2007.
+ Updated: 25 September 2007.
  <hr />
 </div>
 
@@ -127,6 +133,9 @@
   <a href="#" onclick="document.getElementById('demoDiv').style.background=''; return false">None</a>
  </div>
 
+ <h3>IMAGE DROPSHADOW</h3>
+ <p>(PNG background behind GIF/JPEG)</p>
+ <img class="shadowImg" src="helix.gif" />
 </div>
 
 
@@ -154,21 +163,46 @@ include:</p>
 <ol>
  <li>Copy and paste <code>iepngfix.htc</code> and <code>blank.gif</code> into
   your website folder.</li>
- <li>Open this HTML file with a text editor like Windows Notepad.</li>
- <li>Either copy the CSS rule into your site stylesheet, or the JavaScript
-  activation method into one of your site's script files. The path to the .HTC
-  file is set relative to the location of the HTML file, not the CSS file!</li>
- <li>Ensure that you include in your CSS rule the elements that you want the
-  script to process for transparency support.</li>
- <li>If your site uses subfolders, edit the .HTC so that <code>blankImg</code>
-  variable points to blank.gif; your path must be relative to the HTML file
-  containing the PNGs. Otherwise, you will see a "broken image" graphic!</li>
+ <li>Copy and paste this into your website's CSS or HTML:
+  <blockquote>
+   <code>
+    &lt;style type="text/css"&gt;<br />
+    img, div { behavior: url(iepngfix.htc) };<br />
+    &lt;/style&gt;
+   </code>
+  </blockquote>
+  That CSS selector must include the tags/elements on which you want PNG
+  support -- basically, give it a comma-separated list of tags you use.
+  It must also include the correct path to the .HTC <em>relative to the HTML
+  document location</em> (not relative to the CSS document!). For instance,
+  yours may look like this:
+  <blockquote>
+   <code>
+    &lt;style type="text/css"&gt;<br />
+    img, div, a, input { behavior: url(/css/resources/iepngfix.htc) };<br />
+    &lt;/style&gt;
+   </code>
+  </blockquote>
+ </li>
+ <li>If your site uses subfolders, open the .HTC file in a text editor like
+  Windows Notepad and change the <code>blankImg</code> variable to include
+  a correct path to blank.gif like so:
+  <blockquote>
+   <code>
+    var blankImg = '/images/blank.gif';
+   </code>
+  </blockquote>
+  Again the path is relative to the HTML file.
+  Otherwise, you will see a "broken image" graphic!</li>
  <li>Sit back and enjoy! Perhaps consider making a
   <a href="http://www.twinhelix.com/donate/">donation</a> to support this script's
   development if you like what you see :). Alternatively I would certainly
   appreciate a crediting link on your site back to mine!</li>
 </ol>
 
+<p>If you are interested in more details or an alternative activation method
+for the script that maintains CSS validation compatibility, see the source
+code to this demonstration file.</p>
 
 <h3>How to fix common problems</h3>
 <dl>
@@ -176,9 +210,10 @@ include:</p>
  <dd>Make sure you remember that the path to the HTC file is relative to the HTML
   file, not the CSS file (like CSS background images are).</dd>
  <dt>It works offline but not online.</dt>
-  <dd>Ensure your Web server is sending the correct MIME type of "text/x-component"
-   for .HTC files. If you encounter this issue with the Apache server, try one of
-   these two easy fixes:
+  <dd>First try unzipping this default demonstration and uploading to your web
+   server as-is. If it doesn't work, you have a MIME type problem.
+   You must ensure your server is sending the correct MIME type of "text/x-component"
+   for .HTC files. Try one of these two easy fixes:
    <ol>
     <li>Upload the ".htaccess" file from within this script's download ZIP to your
      webserver, which will make Apache send the correct MIME type.</li>
@@ -186,7 +221,7 @@ include:</p>
      the same folder and call that instead, which also sends the right MIME type.</li>
    </ol>
  </dd>
- <dt>My PNGs are transparent but have a funny border.</dt>
+ <dt>My PNGs are transparent but have a funny border or red "X" icon.</dt>
  <dd>Check that the blankImg variable is set correctly in the .HTC file, again
   this should be relative to the HTML document containing the PNGs.</dd>
 </dl>
@@ -255,7 +290,9 @@ to a minimum (at the expense of comprehensibility, sorry!).</p>
    <li>Added support for CSS className changing of background images.</li>
    <li>The script now detects element's background-repeat and sets the PNG
     sizingMethod to 'crop' or 'scale' automatically.</li>
-   <li>Enhanced link fixer and added popup warning dialog when links are unclickable.</li>
+   <li>Enhanced link fixer to cover many clickable elements, and added popup
+    warning dialog when the fix cannot be made.</li>
+   <li>Support for PNG backgrounds behind GIF/JPEG images (e.g. dropshadows).</li>
    <li>Loosened the URL matching rules, now any URLs with a .PNG in the path are
     activated, so /cgi-app/foo.png?date=123 will now work without modifications.</li>
    <li>Now works with the 'Whatever:hover' behavior to support :HOVER changing of

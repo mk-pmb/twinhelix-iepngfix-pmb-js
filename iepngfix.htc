@@ -1,4 +1,4 @@
-<public:component" lightweight="true">
+<public:component lightweight="true">
 <public:attach event="onpropertychange" onevent="iePNGFix(0)" />
 
 <script type="text/javascript">
@@ -15,14 +15,20 @@
 if (typeof blankImg == 'undefined') var blankImg = 'blank.gif';
 
 
-function filt(s)
-{
- if (s && currentStyle.width == 'auto' && currentStyle.height == 'auto')
-  style.width = offsetWidth + 'px';
 
+function filt(s, b)
+{
  var f = 'DXImageTransform.Microsoft.AlphaImageLoader';
  var sM = (currentStyle.backgroundRepeat == 'no-repeat') ? 'crop' : 'scale';
  s = (s || '').replace(/\(/g, '%28').replace(/\)/g, '%29');
+
+ if (s && !(/IMG|INPUT/.test(nodeName) && !b) && 
+  currentStyle.width == 'auto' && currentStyle.height == 'auto')
+ {
+  style.width = offsetWidth + 'px';
+  style.display = 'block';
+ }
+
  if (filters[f])
  {
   filters[f].enabled = s ? true : false;
@@ -51,30 +57,37 @@ function iePNGFix(init)
   return;
  }
 
- var bgSrc = currentStyle.backgroundImage || style.backgroundImage;
-
  if (isSrc && this.src && /IMG|INPUT/.test(nodeName))
  {
   if ((/\.png([^\.]+|$)/i).test(src))
   {
-   filt(src);
+   filt(src, 1);
    src = blankImg;
   }
   else if (src.indexOf(blank) == -1) filt();
  }
- else if (bgSrc.indexOf(blankImg) == -1)
+
+ var bgSrc = currentStyle.backgroundImage || style.backgroundImage;
+ if ((bgSrc + this.src).indexOf(blank) == -1)
  {
-  var bgPNG = bgSrc.match(/^url[("']+(.*\.png[^\)"']*)[\)"']+$/i);
+  var bgPNG = bgSrc.match(/url[("']+(.*\.png[^\)"']*)[\)"']+/i);
 
   if (bgPNG)
   {
    style.backgroundImage = 'url("' + blankImg + '")';
-   filt(bgPNG[1]);
-   // IE link fix -- maybe add IFRAMEs etc here.
-   var links = all.tags('a'), i = links.length;
-   if (i && (/relative|absolute/i).test(currentStyle.position))
-    alert('IEPNGFix: Links won\'t work within positioned elements');
-   while (i--) links[i].style.position = 'relative';
+   filt(bgPNG[1], 0);
+   // Unclickable elements inside PNG backgrounds.
+   var tags = ['a', 'input', 'select', 'textarea', 'iframe', 'object'],
+    t = tags.length, tFix = [];
+   while (t--)
+   {
+    var elms = all.tags(tags[t]), e = elms.length;
+    while (e--) tFix.push(elms[e]);    
+   }
+   var t = tFix.length;
+   if (t && (/relative|absolute/i).test(currentStyle.position))
+    alert('IEPNGFix: Children of positioned element are unclickable!\n' + this);
+   while(t--) tFix[t].style.position = 'relative';
   }
   else filt();
  }
