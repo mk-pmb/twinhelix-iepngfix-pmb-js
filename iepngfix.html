@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+ <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+ <title>IE PNG Alpha Fix Demonstration</title>
+
+ <style type="text/css">
+
+ /*
+  USAGE: All you have to do is include this one line in your CSS file, with the
+  tag names to which you want the script applied.
+  Ensure the path to the .HTC file is correct too.
+ */
+
+ img, div { behavior: url("iepngfix.htc") }
+
+ /*
+
+  Alternatively, you can specify that this will apply to all tags like so:
+   * { behavior: url("iepngfix.htc") }
+
+ */
+
+ </style>
+
+ <script type="text/javascript">
+ //<![CDATA[
+
+ // If you don't want to put nonstandard properties in your stylesheet, here's yet
+ // another means of activating the script. This assumes that you have at least one
+ // stylesheet included already in the document above this script.
+ // To activate, delete the CSS rule above and uncomment below (remove /* and */ ).
+
+ /*
+ if (document.all && document.styleSheets && document.styleSheets[0] &&
+  document.styleSheets[0].addRule)
+ {
+  document.styleSheets[0].addRule('*', 'behavior: url(iepngfix.htc)');
+  // Feel free to add rules for specific elements only, as above.
+  // You have to call this once for each element, like so:
+  //document.styleSheets[0].addRule('img', 'behavior: url(iepngfix.htc)');
+  //document.styleSheets[0].addRule('div', 'behavior: url(iepngfix.htc)');
+ }
+ */
+
+ //]]>
+ </script>
+</head>
+
+<body style="font: 10pt/14pt sans-serif; background-color: #FFFFFF">
+
+<div style="text-align: center; margin-top: 10pt">
+ <h1 style="font-size: 20pt">IE PNG Alpha Fix v1.0 RC5 Preview</h1>
+ by Angus Turnbull - <a href="http://www.twinhelix.com">http://www.twinhelix.com</a>.
+ Updated: 5 April 2007.
+ <hr />
+</div>
+
+
+<div style="background-image: url(checkerboard.gif); border: 2px solid #999; padding: 20px; float: right">
+
+ <h4>Demo:</h4>
+
+ <!-- As you can see, regular image/background swapping works automatically, too! -->
+
+ <strong>REGULAR IMAGE TAG:</strong>
+ <a href="javascript:void(document.getElementById('testImg').src='helix.gif')">gif</a> |
+ <a href="javascript:void(document.getElementById('testImg').src='opacity.png')">png</a>
+ <br />
+ <img id="testImg" src="opacity.png" />
+
+ <p>&nbsp;</p>
+ <strong>BACKGROUND IMAGE</strong>:
+ <a href="javascript:void(document.getElementById('testDiv').style.background='url(helix.gif)')">gif</a> |
+ <a href="javascript:void(document.getElementById('testDiv').style.background='url(opacity.png)')">png</a>
+ <div id="testDiv" style="height: 200px; width: 200px; background: url(opacity.png)">
+  <p>&nbsp;</p>
+  <p>&nbsp; &nbsp; Div Content</p>
+ </div>
+
+</div>
+
+
+<h4>What is it?</h4>
+<p>This is a IE5.5+ "bevhavior" that automatically adds near-native PNG support to
+MSIE 5.5 and 6.0 without any changes to the HTML document itself. Supported features
+include:</p>
+<ul>
+ <li>Automatic activation of transparency for PNGs in the page.</li>
+ <li>Support for &lt;IMG SRC=""&gt; elements.</li>
+ <li>Support for background PNG images (unlike many other scripts!)</li>
+ <li>Background images can be defined inline or in external stylesheets.</li>
+ <li>Automatically handles changed SRC/background via JavaScript
+  (e.g. rollover images).</li>
+ <li>Change support includes CSS 'className' changes on elements.</li>
+ <li>Incorporates automatic workaround for &lt;a href=""&gt; elements within
+  PNG-background elements.</li>
+ <li>Tiny script (for fast downloads).</li>
+ <li>Licensed under a Free Software license.</li>
+</ul>
+<p>Limitations and known isses with the script include:</li>
+<ul>
+ <li>Background repeat and position are unsupported by the IE filter and don't work.</li>
+ <li>Due to an IE bug, if you are putting links within an element with a transparent
+  background, the element must <em>not</em> have a CSS relative/absolute position.
+  Otherwise the links will be un-clickable. The script will warn you if this occurs.</li>
+ <li>It's most reliable on elements with non-'auto' dimensions set. So, give images and
+  other elements width/height values; '100%', '10em' and '200px' and so on are all OK.</li>
+ <li>Elements to which you apply PNGs must be blocks, not inline (e.g. SPAN, A etc.).
+  You can fix this easily by adding 'display: block' to the element's CSS.</li>
+ <li>A:HOVER transparent images are not supported out of the box. If you want
+  this functionality, I recommend you download the excellent
+  <a href="http://www.xs4all.nl/~peterned/csshover.html">Whatever:hover</a>
+  script, which will enable :hover changes on all page elements when combined
+  with this script.</li>
+ <li>IE 4.0/5.0 are not supported. MSIE/Mac has native support for IMG SRC but
+  no background PNG support.</li>
+ <li>Users can't right-click-save processed PNG images, they'll save the blank GIF
+  file if they try that. In some cases this might be a feature, not a bug...</li>
+ <li>The script detects the ".png" extension in image URLs. So if you have a CGI script that
+  generates a PNG image, you may have to rewrite parts of the script, or just cache them as PNG
+  files somewhere.</li>
+ <li>Padding and borders don't indent the PNG image. An easy fix for this is to
+  wrap your PNG images in container DIVs or similar.</li>
+ <li>There may be about a short time as soon as the image loads when images are not
+  transparent, before the IE filter kicks in.</li>
+ <li>If it works offline but not online, ensure your Web server is correctly set
+  up to return a MIME type of "text/x-component" for .HTC files.</li>
+</ul>
+
+
+<h4>How To Use</h4>
+<p>Follow these simple steps to add this to your page:</p>
+<ol>
+ <li>Copy and paste <code>iepngfix.htc</code> and <code>blank.gif</code> into
+  your website folder.</li>
+ <li>Open this HTML file with a text editor like Windows Notepad.</li>
+ <li>Either copy the CSS rule into your site stylesheet, or the JavaScript
+  activation method into one of your site's script files.</li>
+ <li>Ensure that you include in your CSS rule the elements that you want the
+  script to process for transparency support.</li>
+ <li>If your site uses subfolders, ensure that within the .HTC file, the
+  <code>blankImg</code> variable is correctly set. Otherwise, you will see a
+  "broken image" marker on top of your PNGs.</li>
+ <li>Sit back and enjoy! Perhaps consider making a
+  <a href="http://www.twinhelix.com/donate/">donation</a> to support this script's
+  development if you like what you see :).</li>
+</ol>
+
+
+<h4>License:</h4>
+<blockquote>
+ <p>IE5.5+ PNG Alpha Fix v1.0RC5</p>
+ <p>(c) 2004-2007 Angus Turnbull http://www.twinhelix.com</p>
+ <p>This is licensed under the <a href="http://creativecommons.org/licenses/LGPL/2.1/">GNU LGPL,
+  version 2.1 or later</a>.</p>
+</blockquote>
+<p>If you want to link my <a href="http://www.twinhelix.com">site</a>
+or make a <a href="http://www.twinhelix.com/donate/">donation</a>, you're more than welcome :).</p>
+
+
+<h4>Tech Specs</h4>
+<p>IE5.5+ includes support for an 'AlphaImageLoader' filter, that can take an element on the page
+and insert a correctly-rendered PNG image inbetween the element's content and background. This
+script automatically scans all IMG SRCs and element backgroundImages for .PNG files, and if it
+finds them, it removes the regular image and substitutes this filter in place. See the source if
+you want, but I've coded it quite compactly to keep download time down to a minimum.</p>
+
+
+<h4>Changelog</h4>
+
+<ul>
+ <li>v1.0 RC5
+  <ul>
+   <li>Added support for CSS className changing of background images.</li>
+   <li>Switched from 'crop' to 'scale' for the sizingMethod for background images.</li>
+   <li>Enhanced link fixer and added popup warning dialog when links are unclickable.</li>
+   <li>Made the component 'lightweight' for a small speed boost.</li>
+   <li>Rewrote the documentation, now it's understandable by human beings.</li>
+   <li>Minor tweaks and optimisations.</li>
+  </ul>
+ </li>
+ <li>v1.0 RC4 and earlier
+  <ul>
+   <li>Various tweaks ;).</li>
+  </ul>
+ </li>
+</ul>
+
+</body>
+</html>
