@@ -170,9 +170,9 @@
 <body>
 
 <div id="header">
- <h1>IE PNG Alpha Fix v2.0 Alpha 3</h1>
+ <h1>IE PNG Alpha Fix v2.0 Alpha 4</h1>
  by Angus Turnbull - <a href="http://www.twinhelix.com">http://www.twinhelix.com</a>.
- Updated: 30 August 2008.
+ Updated: 2 October 2009.
  <hr />
 </div>
 
@@ -410,6 +410,13 @@ code to this demonstration file.</p>
   sure that you are not trying to tile a 1x1px PNG background over a large
   element, as this will bring the browser to its kness -- make your images a
   little larger if you run into this :).</dd>
+ <dt>The browser is making hundreds of extra HTTP requests.</dt>
+ <dd> See <a href="http://support.microsoft.com/default.aspx?scid=kb;EN-US;Q319176">this
+  MSDN HTC bug report</a> for the details and a workaround. The same technique
+  might prove handy with the BLANK.GIF file too if that's your problem.</dd>
+ <dt>The MIME type and path are right, but the core script won't load online.</dt>
+ <dd>Check that your server isn't sending the HTC file GZIP-compressed. This
+  can break IE6, it seems.</dd>
  <dt>It still won't go.</dt>
  <dd>Try running the self-test at the bottom of the list of demo images.
   If that throws any errors, you'll know where to start fixing!</dd>
@@ -441,7 +448,7 @@ code to this demonstration file.</p>
 <h3>License:</h3>
 <blockquote>
  <p>IE5.5+ PNG Alpha Fix</p>
- <p>(c) 2004-2008 Angus Turnbull http://www.twinhelix.com</p>
+ <p>(c) 2004-2009 Angus Turnbull http://www.twinhelix.com</p>
  <p>This is licensed under the <a href="http://creativecommons.org/licenses/LGPL/2.1/">GNU LGPL,
   version 2.1 or later</a>.</p>
 </blockquote>
@@ -462,6 +469,15 @@ to a minimum (at the expense of comprehensibility, sorry!).</p>
 
 <h3>Changelog</h3>
 <ul>
+ <li>v2.0 Alpha 4<
+  <ul>
+   <li>Made blankImg pathname relative to the HTC by default.</li>
+   <li>Added Macromedia rollover script compatibility.</li>
+   <li>Fix for tiled backgrounds in elements with padding.</li>
+   <li>Initially "display: none" PNG images now show once visible.</li>
+   <li>Documentation updates.</li>
+  </ul>
+ </li>
  <li>v2.0 Alpha 3
   <ul>
    <li>Changed activation method so inline LI elements etc. work OK.</li>

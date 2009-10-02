@@ -1,5 +1,5 @@
 // IE5.5+ PNG Alpha Fix v2.0 Alpha: Background Tiling Support
-// (c) 2008 Angus Turnbull http://www.twinhelix.com
+// (c) 2008-2009 Angus Turnbull http://www.twinhelix.com
 
 // This is licensed under the GNU LGPL, version 2.1 or later.
 // For details, see: http://creativecommons.org/licenses/LGPL/2.1/
@@ -107,12 +107,12 @@ IEPNGFix.tileBG = function(elm, pngSrc, ready) {
 					tiles.cache[count] = document.createElement('div');
 					isNew = 1;
 				}
-				var clipR = (xPos + pngW > elmW ? elmW - xPos : pngW),
-					clipB = (yPos + pngH > elmH ? elmH - yPos : pngH);
+				var clipR = Math.max(0, xPos + pngW > elmW ? elmW - xPos : pngW),
+					clipB = Math.max(0, yPos + pngH > elmH ? elmH - yPos : pngH);
 				d = tiles.cache[count];
 				s = d.style;
 				s.behavior = 'none';
-				s.left = xPos + 'px';
+				s.left = (xPos - parseInt(elm.currentStyle.paddingLeft)) + 'px';
 				s.top = yPos + 'px';
 				s.width = clipR + 'px';
 				s.height = clipB + 'px';

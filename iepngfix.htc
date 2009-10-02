@@ -2,7 +2,7 @@
 <script type="text/javascript">
 
 // IE5.5+ PNG Alpha Fix v2.0 Alpha
-// (c) 2004-2008 Angus Turnbull http://www.twinhelix.com
+// (c) 2004-2009 Angus Turnbull http://www.twinhelix.com
 
 // This is licensed under the GNU LGPL, version 2.1 or later.
 // For details, see: http://creativecommons.org/licenses/LGPL/2.1/
@@ -11,9 +11,12 @@ var IEPNGFix = window.IEPNGFix || {};
 IEPNGFix.data = IEPNGFix.data || {};
 
 
-// This must be a path to a blank image, relative to the HTML document(s).
-// In production use I suggest '/images/blank.gif' or similar. That's all!
-IEPNGFix.blankImg = 'blank.gif';
+// CONFIG: blankImg is the path to blank.gif, *relative to the HTML document*.
+// Try either:
+// * An absolute path like:  '/images/blank.gif'
+// * A path relative to this HTC file like:  thisFolder + 'blank.gif'
+var thisFolder = document.URL.replace(/(\\|\/)[^\\\/]*$/, '/');
+IEPNGFix.blankImg = thisFolder + 'blank.gif';
 
 
 IEPNGFix.fix = function(elm, src, t) {
@@ -32,8 +35,12 @@ IEPNGFix.fix = function(elm, src, t) {
 		src && !(/IMG|INPUT/.test(elm.nodeName) && (t != 2)) &&
 		elm.currentStyle.width == 'auto' && elm.currentStyle.height == 'auto'
 	) {
-		elm.style.width = elm.offsetWidth + 'px';
-		elm.style.height = elm.clientHeight + 'px';
+		if (elm.offsetWidth) {
+			elm.style.width = elm.offsetWidth + 'px';
+		}
+		if (elm.clientHeight) {
+			elm.style.height = elm.clientHeight + 'px';
+		}
 		if (elm.currentStyle.display == 'inline') {
 			elm.style.display = 'inline-block';
 		}
@@ -101,8 +108,12 @@ IEPNGFix.process = function(elm, init) {
 	}
 
 	// Foregrounds.
-	if (isSrc && elm.src &&  { IMG: 1, INPUT: 1 }[elm.nodeName]) {
+	if (isSrc && elm.src && { IMG: 1, INPUT: 1 }[elm.nodeName]) {
 		if ((/\.png/i).test(elm.src)) {
+			if (!elm.oSrc) {
+				// MM rollover compat
+				elm.oSrc = elm.src;
+			}
 			this.fix(elm, elm.src, 2);
 		} else if (elm.src.indexOf(blank) == -1) {
 			this.fix(elm, '');
