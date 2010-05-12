@@ -112,7 +112,10 @@ IEPNGFix.tileBG = function(elm, pngSrc, ready) {
 				d = tiles.cache[count];
 				s = d.style;
 				s.behavior = 'none';
-				s.left = (xPos - parseInt(elm.currentStyle.paddingLeft)) + 'px';
+				s.left = (elm.currentStyle.display == 'inline' ?
+					xPos + parseInt(elm.currentStyle.marginLeft) :
+					xPos - parseInt(elm.currentStyle.paddingLeft)
+					) + 'px';
 				s.top = yPos + 'px';
 				s.width = clipR + 'px';
 				s.height = clipB + 'px';
