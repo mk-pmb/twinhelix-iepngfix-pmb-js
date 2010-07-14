@@ -195,4 +195,5 @@ IEPNGFix.hook = function() {
 IEPNGFix.process(element, 1);
 
 </script>
+<script type="text/javascript"></script>
 </public:component>
