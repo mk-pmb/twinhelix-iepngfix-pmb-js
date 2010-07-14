@@ -59,7 +59,7 @@ IEPNGFix.fix = function(elm, src, t) {
 			elm.filters[f].src = src;
 		}
 	} else if (src) {
-		elm.style.filter = 'progid:' + f + '(src="' + src +
+		elm.style.filter += ' progid:' + f + '(src="' + src +
 			'",sizingMethod="' + (t == 2 ? 'scale' : 'crop') + '")';
 	}
 
