@@ -1,5 +1,5 @@
 // IE5.5+ PNG Alpha Fix v2.0 Alpha: Background Tiling Support
-// (c) 2008-2009 Angus Turnbull http://www.twinhelix.com
+// (c) 2008-2010 Angus Turnbull http://www.twinhelix.com
 
 // This is licensed under the GNU LGPL, version 2.1 or later.
 // For details, see: http://creativecommons.org/licenses/LGPL/2.1/
@@ -10,12 +10,13 @@ IEPNGFix.tileBG = function(elm, pngSrc, ready) {
 	// Params: A reference to a DOM element, the PNG src file pathname, and a
 	// hidden "ready-to-run" passed when called back after image preloading.
 
-	var data = this.data[elm.uniqueID],
-		elmW = Math.max(elm.clientWidth, elm.scrollWidth),
+	var eCS = elm.currentStyle,
+		data = this.data[elm.uniqueID],
+		elmW = Math.max(elm.clientWidth, elm.scrollWidth);
 		elmH = Math.max(elm.clientHeight, elm.scrollHeight),
-		bgX = elm.currentStyle.backgroundPositionX,
-		bgY = elm.currentStyle.backgroundPositionY,
-		bgR = elm.currentStyle.backgroundRepeat;
+		bgX = eCS.backgroundPositionX,
+		bgY = eCS.backgroundPositionY,
+		bgR = eCS.backgroundRepeat;
 
 	// Cache of DIVs created per element, and image preloader/data.
 	if (!data.tiles) {
@@ -88,7 +89,7 @@ IEPNGFix.tileBG = function(elm, pngSrc, ready) {
 
 	// Go!
 	this.hook.enabled = 0;
-	if (!({ relative: 1, absolute: 1 }[elm.currentStyle.position])) {
+	if (!({ relative: 1, absolute: 1 }[eCS.position])) {
 		elm.style.position = 'relative';
 	}
 	var count = 0,
@@ -112,10 +113,8 @@ IEPNGFix.tileBG = function(elm, pngSrc, ready) {
 				d = tiles.cache[count];
 				s = d.style;
 				s.behavior = 'none';
-				s.left = (elm.currentStyle.display == 'inline' ?
-					xPos + parseInt(elm.currentStyle.marginLeft) :
-					xPos - parseInt(elm.currentStyle.paddingLeft)
-					) + 'px';
+				s.left = xPos + (eCS.display == 'inline' ?
+					(parseInt(eCS.marginLeft) || 0) : 0) + 'px';
 				s.top = yPos + 'px';
 				s.width = clipR + 'px';
 				s.height = clipB + 'px';
@@ -128,11 +127,7 @@ IEPNGFix.tileBG = function(elm, pngSrc, ready) {
 				if (isNew) {
 					s.position = 'absolute';
 					s.zIndex = -999;
-					if (elm.firstChild) {
-						elm.insertBefore(d, elm.firstChild);
-					} else {
-						elm.appendChild(d);
-					}
+					elm.insertBefore(d, elm.firstChild);
 				}
 				this.fix(d, pngSrc, 0);
 				count++;

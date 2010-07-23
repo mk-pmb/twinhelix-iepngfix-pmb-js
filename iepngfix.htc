@@ -2,7 +2,7 @@
 <script type="text/javascript">
 
 // IE5.5+ PNG Alpha Fix v2.0 Alpha
-// (c) 2004-2009 Angus Turnbull http://www.twinhelix.com
+// (c) 2004-2010 Angus Turnbull http://www.twinhelix.com
 
 // This is licensed under the GNU LGPL, version 2.1 or later.
 // For details, see: http://creativecommons.org/licenses/LGPL/2.1/
@@ -35,14 +35,14 @@ IEPNGFix.fix = function(elm, src, t) {
 		src && !(/IMG|INPUT/.test(elm.nodeName) && (t != 2)) &&
 		elm.currentStyle.width == 'auto' && elm.currentStyle.height == 'auto'
 	) {
+		if (elm.currentStyle.display == 'inline') {
+			elm.style.display = 'inline-block';
+		}
 		if (elm.offsetWidth) {
 			elm.style.width = elm.offsetWidth + 'px';
 		}
 		if (elm.clientHeight) {
 			elm.style.height = elm.clientHeight + 'px';
-		}
-		if (elm.currentStyle.display == 'inline') {
-			elm.style.display = 'inline-block';
 		}
 	}
 
