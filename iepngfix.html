@@ -170,9 +170,9 @@
 <body>
 
 <div id="header">
- <h1>IE PNG Alpha Fix v2.0 Alpha 4</h1>
+ <h1>IE PNG Alpha Fix v2.0 Alpha 5 (Preview)</h1>
  by Angus Turnbull - <a href="http://www.twinhelix.com">http://www.twinhelix.com</a>.
- Updated: 2 October 2009.
+ Updated: 16 October 2010.
  <hr />
 </div>
 
@@ -383,15 +383,16 @@ code to this demonstration file.</p>
  <dt>Images are distorted, or this script breaks my page layout.</dt>
  <dd>When applied to images without set dimensions, this script will try and
   "guess" the correct image size and apply that. If it gets it wrong, give
-  your images a definite <code>width</code> and <code>height</code>.</dd>
- <dt>Links or form elements within a PNG'd element aren't clickable.</dt>
- <dd>Due to an IE bug, if you are putting links within an element with a transparent
-  background, the element must <em>not</em> have a CSS relative/absolute position.
-  Otherwise the links will likely be un-clickable. The script will warn you with
-  a popup alert dialog if this occurs. There is an excellent article on
+  your images a definite <code>width</code> and <code>height</code>. Also, in
+  IE6 using margins can often be more reliable than padding (and putting them
+  on parent elements even more so).</dd>
+ <dt>Links or form elements within a PNG'd element are "unclickable".</dt>
+ <dd>Due to an IE bug, elements within a PNG'd element that is absolutely or
+  relatively positioned will be unclickable and the script will popup a warning.
+  For more into, see this excellent article on
   <a href="http://www.satzansatz.de/cssd/tmp/alphatransparency.html">PNG filters
-  and links</a> you might want to read if you are a CSS expert that contains
-  more info and workarounds.</dd>
+  and links</a>. The simplest fix is to make sure you have the background tiling
+  JS file included in the page which will work around the issue.</dd>
  <dt>It works, but breaks another application like Google Maps on my page.</dt>
  <dd>You'll need to stop applying this behavior to the third-party element that
   presumably contains its own PNG fix. Try making your CSS selector more specific,
@@ -403,7 +404,9 @@ code to this demonstration file.</p>
   <code>dxtrans.dll</code> and <code>dxtmsft.dll</code> for filter support,
   try Googling for them or finding them on your Windows install CD.
   They must also be the "version 6" DLLs, not v7+, to work with IE6.
-  Note that I can't support your setup here, sorry!</dd>
+  You may also want to try virtualising an older Windows, Microsoft
+  <a href="http://www.microsoft.com/downloads/en/details.aspx?FamilyId=21EABB90-958F-4B64-B5F1-73D0A413C8EF&displaylang=en">gives away</a>
+  some time-limited virtual PC images if you don't have an install CD.</dd>
  <dt>I have lots of images and page loading is slow.</dt>
  <dd>With a lot of images, it can certainly slow down your page! Make sure
   that you apply the script as narrowly as possible. Consider applying only to
@@ -418,38 +421,33 @@ code to this demonstration file.</p>
  <dt>The MIME type and path are right, but the core script won't load online.</dt>
  <dd>Check that your server isn't sending the HTC file GZIP-compressed. This
   can break IE6, it seems.</dd>
+ <dt>I use jQuery on the page, and this script won't load.</dt>
+ <dd>jQuery versions from 1.3 onwards cause a conflict with this
+  script so that this behaviour will not even load or run. The solution is to
+  make sure that the HTC file is included in the page after jQuery.</dd>
+ <dt>I want to use A:HOVER to swap PNGs on mouseover, but it doesn't work.</dt>
+ <dd>Hover is badly broken in IE6 and this script doesn't support it out of
+  the box on links. If you want this functionality, try the excellent
+  <a href="http://www.xs4all.nl/~peterned/csshover.html">Whatever:hover</a>
+  script which can enable :hover PNG background changes on all page elements.
+  Alternatively, try swapping a className on mouseover like in the demo above.</dd>
+ <dt>When I right-click-save-as the PNG image, it saves BLANK.GIF</dt>
+ <dd>This is by design. It may be a feature not a bug for some people ;).</dd>
+ <dt>I am generating PNGs from a CGI script and they're not transparent.</dt>
+ <dd>The script detects the ".png" extension in image URLs. Try adding a dummy
+  image name parameter to your CGI script with that extension in it.</dd>
+ <dt>There is a short delay as the page loads before PNGs are transparent.</dt>
+ <dd>I've tried to minimise this but it's somewhat unavoidable!</dd>
  <dt>It still won't go.</dt>
  <dd>Try running the self-test at the bottom of the list of demo images.
   If that throws any errors, you'll know where to start fixing!</dd>
 </dl>
 
 
-<h3>Limitations and known isses with the script</h3>
-<ul>
- <li>Padding and borders don't indent the PNG image and can sometimes contribute
-  to the distortion problem. An easy fix is to use 'margin' instead.</li>
- <li>A:HOVER transparent images are not supported out of the box. If you want
-  this functionality, I recommend you download the excellent
-  <a href="http://www.xs4all.nl/~peterned/csshover.html">Whatever:hover</a>
-  script. This script will then enable :hover PNG background changes on all page
-  elements when both are applied to the page.</li>
- <li>IE 4.0/5.0 are not supported. MSIE/Mac has native support for IMG SRC but
-  no background PNG support. The scripts does nothing in MSIE7 as it supports
-  PNGs natively.</li>
- <li>Users can't right-click-save processed PNG images, they'll save the blank GIF
-  file if they try that. In some cases this might be a feature, not a bug...</li>
- <li>The script detects the ".png" extension in image URLs. So if you have a CGI script that
-  generates a PNG image, you may have to rewrite parts of the script, or just cache them as PNG
-  files somewhere.</li>
- <li>There may be about a short time as soon as the image loads when images are not
-  transparent, before the IE filter kicks in.</li>
-</ul>
-
-
 <h3>License:</h3>
 <blockquote>
  <p>IE5.5+ PNG Alpha Fix</p>
- <p>(c) 2004-2009 Angus Turnbull http://www.twinhelix.com</p>
+ <p>(c) 2004-2010 Angus Turnbull http://www.twinhelix.com</p>
  <p>This is licensed under the <a href="http://creativecommons.org/licenses/LGPL/2.1/">GNU LGPL,
   version 2.1 or later</a>.</p>
 </blockquote>
