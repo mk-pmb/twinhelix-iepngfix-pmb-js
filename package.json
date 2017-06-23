@@ -1,0 +1,37 @@
+{ "name": "twinhelix-iepngfix-pmb",
+  "version": "0.20005.1",
+  "description": "A clone of TwinHelix's IE PNG Alpha Fix (iepngfix HTC) repo. This clone comes with a readme, package manifest and npm package.",
+  "keywords": [
+    "alpha",
+    "internet explorer",
+    "msie",
+    "png",
+    "portable network graphics",
+    "shim",
+    "transparency",
+    "web component",
+    "webcomponent"
+  ],
+
+  "author": "Angus Turnbull (http://www.twinhelix.com)",
+  "homepage": "https://github.com/mk-pmb/twinhelix-iepngfix-pmb-js#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mk-pmb/twinhelix-iepngfix-pmb-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mk-pmb/twinhelix-iepngfix-pmb-js/issues"
+  },
+  "contributors": [
+    "M.K. (https://github.com/mk-pmb)"
+  ],
+
+  "private": false, "license": "LGPL-2.1+",
+
+  "main": "twinhelix-iepngfix-pmb.js",
+  "scripts": { "test": "nodejs test/all.js" },
+  "directories": { "test": "test" },
+
+
+  "npm vs. BOM = Unexpected token": "-*- coding: UTF-8 -*-"
+}
