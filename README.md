@@ -14,6 +14,8 @@ comes with a readme, package manifest and npm package.
 * Original readme: http://www.twinhelix.com/css/iepngfix/
   * Couldn't find a license for the readme itself so this one is
     based on [iepngfix.html][howto-html] instead.
+* Live demo: [here on Github][howto-html]
+
 
 
 What is this?
@@ -51,6 +53,10 @@ Explained in [iepngfix.html][howto-html].
 
 License
 -------
+
+&copy; <!--#echo json="package.json" key=".author" -->
+Angus Turnbull (http://www.twinhelix.com)
+<!--/#echo -->
 <!--#echo json="package.json" key=".license" -->
 LGPL-2.1+
 <!--/#echo -->

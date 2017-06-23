@@ -1,5 +1,5 @@
 { "name": "twinhelix-iepngfix-pmb",
-  "version": "0.20005.1",
+  "version": "0.20005.2",
   "description": "A clone of TwinHelix's IE PNG Alpha Fix (iepngfix HTC) repo. This clone comes with a readme, package manifest and npm package.",
   "keywords": [
     "alpha",
